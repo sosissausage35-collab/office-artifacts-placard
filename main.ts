@@ -19,14 +19,22 @@ const PLACARD =
 const OUTPUT_PATH = "/output/entry.txt";
 const MAX_CHARS = 180;
 
-if (PLACARD.length === 0 || PLACARD.trim().length === 0) {
-  throw new Error("placard must not be empty");
+// How the placard joke is constructed: catalogue date ("c. 2019") plus
+// material ("adhesive paper") plus donor ("Anonymous donor") make a
+// mundane sticky note read like an ancient artifact; the deadpan
+// curator voice never explains the joke, it just catalogues it.
+function validateLine(line: string, maxChars: number): void {
+  if (line.trim().length === 0) {
+    throw new Error("placard must not be empty");
+  }
+  if (line.length > maxChars) {
+    throw new Error(
+      `placard is ${line.length} characters, over the ${maxChars} limit`,
+    );
+  }
 }
-if (PLACARD.length > MAX_CHARS) {
-  throw new Error(
-    `placard is ${PLACARD.length} characters, over the ${MAX_CHARS} limit`,
-  );
-}
+
+validateLine(PLACARD, MAX_CHARS);
 
 mkdirSync(dirname(OUTPUT_PATH), { recursive: true });
 writeFileSync(OUTPUT_PATH, PLACARD, "utf8");
